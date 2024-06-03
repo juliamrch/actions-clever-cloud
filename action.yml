@@ -5,11 +5,37 @@ branding:
   icon: upload-cloud
   color: red
 inputs:
+  orgaID:
+    required: true
+    description: |
+      The ID of your organization (can be found in the Clever Cloud console).
+  type:
+    required: true
+    description: |
+      The type of the application to deploy,
+      if you are using a .clever.json file.
+  region:
+    required: false
+    default: 'par'
+    description: |
+      The region to deploy the application to.
   alias:
     required: false
+    default:  ${{ github.event.pull_request.base.repo.name }}-PR-${{ github.event.number }}
     description: |
       The alias of the application to deploy,
       if you are using a .clever.json file.
+  name:
+    required: false
+    default: ${{ github.event.pull_request.base.repo.name }}-PR-${{ github.event.number }}
+    description: |
+      The name of the application to deploy,
+      if you are using a .clever.json file.
+    domain:
+    required: false
+    default: ${{ github.event.pull_request.base.repo.name }}-PR-${{ github.event.number }}.cleverapps.io
+    description: |
+      The domain of the application to deploy
   appID:
     required: false
     description: |

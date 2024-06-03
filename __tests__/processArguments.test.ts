@@ -43,6 +43,7 @@ test('extra env', () => {
 `
   process.env.CLEVER_TOKEN = 'token'
   process.env.CLEVER_SECRET = 'secret'
+  
   const args = processArguments()
   expect(args.extraEnv).toBeDefined()
   expect(args.extraEnv!.FOO).toEqual('foo')

@@ -13,6 +13,11 @@ export type ExtraEnv = {
 }
 
 export interface Arguments {
+  orgaID?: string
+  type?: string
+  region?: string
+  name?: string
+  domain?: string
   token: string
   secret: string
   alias?: string
@@ -69,7 +74,12 @@ export function processArguments(): Arguments {
   if (!secret) {
     throwMissingEnvVar('CLEVER_SECRET')
   }
-
+  
+  const orgaID = core.getInput('orga_id')
+  const type = core.getInput('type')
+  const region = core.getInput('region')
+  const name = core.getInput('name')
+  const domain = core.getInput('domain')
   const appID = core.getInput('appID')
   const alias = core.getInput('alias')
   const force = core.getBooleanInput('force', { required: false })
@@ -77,6 +87,11 @@ export function processArguments(): Arguments {
   const logFile = core.getInput('logFile') || undefined
   const quiet = core.getBooleanInput('quiet', { required: false })
   return {
+    orgaID,
+    type,
+    region,
+    name,
+    domain,
     token,
     secret,
     alias,
@@ -108,6 +123,11 @@ async function checkForShallowCopy(): Promise<void> {
 }
 
 export default async function run({
+  orgaID,
+  type,
+  region,
+  name,
+  domain,
   token,
   secret,
   appID,
@@ -135,10 +155,19 @@ export default async function run({
     // and only the appID is passed: link will work, but deploy will need
     // an alias to know which app to publish. In this case, we set the alias
     // to the appID, and the alias argument is ignored if also specified.
-    if (appID) {
-      core.debug(`Linking ${appID}`)
-      await exec(cleverCLI, ['link', appID, '--alias', appID], execOptions)
-      alias = appID
+    //if (appID) {
+    //  core.debug(`Linking ${appID}`)
+    //  await exec(cleverCLI, ['link', appID, '--alias', appID], execOptions)
+    //  alias = appID
+    //}
+
+    // Create the app
+    core.debug(`Deploying review app for ${alias}`)
+    if (alias && type && region && orgaID && domain) {
+      await exec(cleverCLI, ['create', '--type', type, '--alias', alias, '--region', region, '--org', orgaID], execOptions)
+      await exec(cleverCLI, ['domain add', domain], execOptions)
+    } else {
+      core.setFailed('Required parameters are missing for deployment.')
     }
 
     // If there are environment variables to pass to the application,
