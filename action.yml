@@ -21,7 +21,7 @@ inputs:
       The region to deploy the application to.
   alias:
     required: false
-    default:  ${{ github.event.pull_request.base.repo.name }}-PR-${{ github.event.number }}
+    default: ${{ github.event.pull_request.base.repo.name }}-PR-${{ github.event.number }}
     description: |
       The alias of the application to deploy,
       if you are using a .clever.json file.
@@ -31,7 +31,7 @@ inputs:
     description: |
       The name of the application to deploy,
       if you are using a .clever.json file.
-    domain:
+  domain:
     required: false
     default: ${{ github.event.pull_request.base.repo.name }}-PR-${{ github.event.number }}.cleverapps.io
     description: |
