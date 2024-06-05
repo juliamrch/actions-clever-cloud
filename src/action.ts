@@ -150,6 +150,14 @@ export default async function run({
 
     // Authenticate (this will only store the credentials at a known location)
     await exec(cleverCLI, ['login', '--token', token, '--secret', secret])
+    await exec(cleverCLI, [
+      'create',
+      '--type', type,
+      '--alias', alias,
+      '--region', region || 'par',
+      '--org', orgaID,
+    ], execOptions)
+    await exec(cleverCLI, ['domain add', domain], execOptions)
 
     // There is an issue when there is a .clever.json file present
     // and only the appID is passed: link will work, but deploy will need
@@ -162,13 +170,13 @@ export default async function run({
     //}
 
     // Create the app
-    core.debug(`Deploying review app for ${alias}`)
-    if (alias && type && region && orgaID && domain) {
-      await exec(cleverCLI, ['create', '--type', type, '--alias', alias, '--region', region, '--org', orgaID], execOptions)
-      await exec(cleverCLI, ['domain add', domain], execOptions)
-    } else {
-      core.setFailed('Required parameters are missing for deployment.')
-    }
+    //core.debug(`Deploying review app for ${alias}`)
+    //if (alias && type && region && orgaID && domain) {
+    //  await exec(cleverCLI, ['create', '--type', type, '--alias', alias, //'--region', region, '--org', orgaID], execOptions)
+    //  await exec(cleverCLI, ['domain add', domain], execOptions)
+    //} else {
+    //  core.setFailed('Required parameters are missing for deployment.')
+    //}
 
     // If there are environment variables to pass to the application,
     // set them before deployment so the new instance can use them.
@@ -231,6 +239,9 @@ export default async function run({
     }
   }
 }
+
+const args =['create', '--type', '--region', '--org', '--alias']
+
 
 // --
 

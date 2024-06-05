@@ -6,7 +6,7 @@ branding:
   color: red
 inputs:
   orgaID:
-    required: true
+    required: false
     description: |
       The ID of your organization (can be found in the Clever Cloud console).
   type:
